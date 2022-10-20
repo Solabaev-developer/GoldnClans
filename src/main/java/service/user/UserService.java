@@ -7,5 +7,5 @@ import java.util.ArrayList;
 
 public interface UserService {
 
-    public ArrayList<User> getAllUsers(Connection connection);
+    public ArrayList<User> getAllUsers();
 }

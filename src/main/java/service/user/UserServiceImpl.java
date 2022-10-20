@@ -1,6 +1,6 @@
 package service.user;
 
-import config.DatabaseConfig;
+import config.Constants;
 import entity.User;
 
 import java.math.BigDecimal;
@@ -9,18 +9,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    private static final String SQL_SELECT = "Select * from main.v_users";
-    private static List userList = new ArrayList<User>();
+    private final ArrayList<User> userList = new ArrayList<User>();
+    private final Connection connection;
+
+    public UserServiceImpl(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
-    public ArrayList<User> getAllUsers(Connection connection) {
-        DatabaseConfig dbConfig = new DatabaseConfig();
-        Connection conn = dbConfig.connectToDb();
+    public ArrayList<User> getAllUsers() {
         try {
-            PreparedStatement statement = conn.prepareStatement(SQL_SELECT);
+            PreparedStatement statement = connection.prepareStatement(Constants.SQL_SELECT_USERS);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Integer id = resultSet.getInt("id");
@@ -45,6 +46,6 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             return null;
         }
-        return (ArrayList<User>) userList;
+        return userList;
     }
 }
